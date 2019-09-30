@@ -1,0 +1,43 @@
+From 063638118e5b53dbb21270e1b2860927fcd61e6a Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Sat, 16 Mar 2019 15:26:14 +0800
+Subject: [PATCH] backport add IgnoreOnIsolate=yes in rpc-statd.service
+
+---
+ systemd/rpc-statd.service | 1 +
+ utils/statd/start-statd   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/systemd/rpc-statd.service b/systemd/rpc-statd.service
+index 1ed60a8..7cd78ec 100644
+--- a/systemd/rpc-statd.service
++++ b/systemd/rpc-statd.service
+@@ -7,6 +7,7 @@ Wants=network-online.target
+ After=network-online.target nss-lookup.target rpcbind.socket
+ 
+ PartOf=nfs-utils.service
++IgnoreOnIsolate=yes
+ 
+ Wants=nfs-config.service
+ After=nfs-config.service
+diff --git a/utils/statd/start-statd b/utils/statd/start-statd
+index 82715b4..54ced82 100755
+--- a/utils/statd/start-statd
++++ b/utils/statd/start-statd
+@@ -20,7 +20,12 @@ fi
+ # First try systemd if it's installed.
+ if [ -d /run/systemd/system ]; then
+     # Quit only if the call worked.
+-    systemctl start rpc-statd.service && exit
++    if systemctl start rpc-statd.service; then
++        # Ensure systemd knows not to stop rpc.statd or its dependencies
++        # on 'systemctl isolate ..'
++        systemctl add-wants --runtime remote-fs.target rpc-statd.service
++        exit 0
++    fi
+ fi
+ 
+ cd /
+-- 
+1.8.3.1
+

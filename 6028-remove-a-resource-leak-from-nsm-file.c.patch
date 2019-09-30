@@ -1,0 +1,24 @@
+From 189401bfd773ee8bc8170272000f4ed8b532a2f3 Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Mon, 17 Jun 2019 15:00:27 +0800
+Subject: [PATCH] backport remove a resource leak from nsm/file.c
+
+---
+ support/nsm/file.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/support/nsm/file.c b/support/nsm/file.c
+index 52f5401..0b66f12 100644
+--- a/support/nsm/file.c
++++ b/support/nsm/file.c
+@@ -533,6 +533,7 @@ nsm_update_kernel_state(const int state)
+ 	len = snprintf(buf, sizeof(buf), "%d", state);
+ 	if (error_check(len, sizeof(buf))) {
+ 		xlog_warn("Failed to form NSM state number string");
++		close(fd);
+ 		return;
+ 	}
+ 
+-- 
+1.8.3.1
+

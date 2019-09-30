@@ -1,0 +1,61 @@
+From 079dad655fad6e2a77810c9e4f7b491c77b0b46e Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Mon, 17 Jun 2019 14:51:08 +0800
+Subject: [PATCH] backport remove resource leaks from nfsidmap/static.c
+
+---
+ support/nfsidmap/static.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/support/nfsidmap/static.c b/support/nfsidmap/static.c
+index f7b8a67..f97c556 100644
+--- a/support/nfsidmap/static.c
++++ b/support/nfsidmap/static.c
+@@ -347,6 +347,7 @@ static int static_init(void) {
+ 			warnx("static_init: calloc (1, %lu) failed",
+ 				(unsigned long)sizeof *unode);
+ 			free(pw);
++			conf_free_list(princ_list);
+ 			return -ENOMEM;
+ 		}
+ 		unode->uid = pw->pw_uid;
+@@ -355,6 +356,9 @@ static int static_init(void) {
+ 		unode->localname = conf_get_str("Static", cln->field);
+ 		if (!unode->localname) {
+ 			free(pw);
++			free(unode->principal);
++			free(unode);
++			conf_free_list(princ_list);
+ 			return -ENOENT;
+ 		}
+ 
+@@ -379,6 +383,7 @@ static int static_init(void) {
+ 			warnx("static_init: calloc (1, %lu) failed",
+ 				(unsigned long)sizeof *gnode);
+ 			free(gr);
++			conf_free_list(princ_list);
+ 			return -ENOMEM;
+ 		}
+ 		gnode->gid = gr->gr_gid;
+@@ -387,6 +392,9 @@ static int static_init(void) {
+ 		gnode->localgroup = conf_get_str("Static", cln->field);
+ 		if (!gnode->localgroup) {
+ 			free(gr);
++			free(gnode->principal);
++			free(gnode);
++			conf_free_list(princ_list);
+ 			return -ENOENT;
+ 		}
+ 
+@@ -394,6 +402,8 @@ static int static_init(void) {
+ 
+ 		LIST_INSERT_HEAD (&gid_mappings[gid_hash(gnode->gid)], gnode, link);
+ 	}
++
++	conf_free_list(princ_list);
+ 	return 0;
+ }
+ 
+-- 
+1.8.3.1
+

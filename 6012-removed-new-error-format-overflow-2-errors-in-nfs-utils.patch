@@ -1,0 +1,42 @@
+From cd373e4a960b4a0e4fc4cec1bd64ecaefbe6e1dc Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Sat, 16 Mar 2019 16:48:03 +0800
+Subject: [PATCH] backport removed new error=format-overflow=2 errors in
+ nfs-utils
+
+---
+ utils/blkmapd/device-discovery.c | 2 +-
+ utils/mount/error.c              | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/utils/blkmapd/device-discovery.c b/utils/blkmapd/device-discovery.c
+index 3a202e0..2ce60f8 100644
+--- a/utils/blkmapd/device-discovery.c
++++ b/utils/blkmapd/device-discovery.c
+@@ -239,7 +239,7 @@ int bl_discover_devices(void)
+ {
+ 	FILE *f;
+ 	int n;
+-	char buf[PATH_MAX], devname[PATH_MAX], fulldevname[PATH_MAX+NAME_MAX];
++	char buf[PATH_MAX], devname[NAME_MAX], fulldevname[PATH_MAX];
+ 
+ 	/* release previous list */
+ 	bl_release_disk();
+diff --git a/utils/mount/error.c b/utils/mount/error.c
+index dfe5c7d..562f312 100644
+--- a/utils/mount/error.c
++++ b/utils/mount/error.c
+@@ -50,8 +50,8 @@
+ 
+ extern char *progname;
+ 
+-static char errbuf[BUFSIZ];
+-static char *erreob = &errbuf[BUFSIZ];
++static char errbuf[PATH_MAX];
++static char *erreob = &errbuf[PATH_MAX];
+ 
+ /* Convert RPC errors into strings */
+ static int rpc_strerror(int spos)
+-- 
+1.8.3.1
+

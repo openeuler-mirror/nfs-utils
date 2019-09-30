@@ -1,0 +1,41 @@
+From 121e7132c7bd4c93dcdf1087039c3ec203947432 Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Sat, 16 Mar 2019 16:23:22 +0800
+Subject: [PATCH] backport do not fatalize -Wstrict-prototypes with internal
+ rpcgen
+
+---
+ configure.ac | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 49b1e8d..3de0ed4 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -149,12 +149,14 @@ AC_ARG_WITH(rpcgen,
+ 	[AC_HELP_STRING([--with-rpcgen=internal], [use internal rpcgen instead of system one])],
+ 	rpcgen_path=$withval,
+ 	rpcgen_path=yes )
++	rpcgen_cflags=-Werror=strict-prototypes
+ 	RPCGEN_PATH=
+ 	if test "$rpcgen_path" = "yes"; then
+ 	    for p in /usr/local/bin/rpcgen /usr/bin/rpcgen /bin/rpcgen
+ 	    do if test -f $p ; then RPCGEN_PATH=$p ; break; fi ; done
+ 	elif test "$rpcgen_path" != "internal"; then
+ 	    RPCGEN_PATH=$rpcgen_path
++	    rpcgen_cflags=-Wstrict-prototypes
+ 	else
+ 	    RPCGEN_PATH=internal
+ 	fi
+@@ -548,7 +550,7 @@ my_am_cflags="\
+  -pipe \
+  -Wall \
+  -Wextra \
+- -Werror=strict-prototypes \
++ $rpcgen_cflags \
+  -Werror=missing-prototypes \
+  -Werror=missing-declarations \
+  -Werror=format=2 \
+-- 
+1.8.3.1
+

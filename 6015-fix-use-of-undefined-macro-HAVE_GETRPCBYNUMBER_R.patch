@@ -1,0 +1,26 @@
+From b7c8b041a6533f4733e7ab3e5d187f2a696b17bc Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Sat, 16 Mar 2019 17:11:54 +0800
+Subject: [PATCH] backport fix use of undefined macro HAVE_GETRPCBYNUMBER_R in
+ svc_socket
+
+---
+ support/nfs/svc_socket.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/nfs/svc_socket.c b/support/nfs/svc_socket.c
+index 1239712..d56507a 100644
+--- a/support/nfs/svc_socket.c
++++ b/support/nfs/svc_socket.c
+@@ -46,7 +46,7 @@ int getservport(u_long number, const char *proto)
+ 	struct rpcent *rpcp;
+ 	struct servent servbuf, *servp = NULL;
+ 	int ret = 0;
+-#if HAVE_GETRPCBYNUMBER_R
++#ifdef HAVE_GETRPCBYNUMBER_R
+ 	char rpcdata[1024];
+ 	struct rpcent rpcbuf;
+ 
+-- 
+1.8.3.1
+

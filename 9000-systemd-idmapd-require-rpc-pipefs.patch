@@ -1,0 +1,27 @@
+From 7816e2ebca35508b599afd6d99de6ae427a3b3d6 Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Thu, 28 Mar 2019 18:56:30 +0800
+Subject: [PATCH] huawei systemd idmapd require rpc pipefs
+
+---
+ systemd/nfs-idmapd.service | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/systemd/nfs-idmapd.service b/systemd/nfs-idmapd.service
+index 38685b6..df3dd9d 100644
+--- a/systemd/nfs-idmapd.service
++++ b/systemd/nfs-idmapd.service
+@@ -1,8 +1,8 @@
+ [Unit]
+ Description=NFSv4 ID-name mapping service
+ DefaultDependencies=no
+-Requires=rpc_pipefs.target
+-After=rpc_pipefs.target local-fs.target
++Requires=var-lib-nfs-rpc_pipefs.mount
++After=var-lib-nfs-rpc_pipefs.mount local-fs.target
+ 
+ BindsTo=nfs-server.service
+ 
+-- 
+1.8.3.1
+

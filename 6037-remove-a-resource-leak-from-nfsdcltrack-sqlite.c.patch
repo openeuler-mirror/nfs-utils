@@ -1,0 +1,25 @@
+From c92497ac2458f63b2b751691d3903b4a4e968cfd Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Mon, 17 Jun 2019 16:05:47 +0800
+Subject: [PATCH] backport remove a resource leak from nfsdcltrack/sqlite.c
+
+---
+ utils/nfsdcltrack/sqlite.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/utils/nfsdcltrack/sqlite.c b/utils/nfsdcltrack/sqlite.c
+index c59f777..2801201 100644
+--- a/utils/nfsdcltrack/sqlite.c
++++ b/utils/nfsdcltrack/sqlite.c
+@@ -215,6 +215,8 @@ sqlite_maindb_init_v2(void)
+ 				&err);
+ 	if (ret != SQLITE_OK) {
+ 		xlog(L_ERROR, "Unable to begin transaction: %s", err);
++		if (err)
++			sqlite3_free(err);
+ 		return ret;
+ 	}
+ 
+-- 
+1.8.3.1
+

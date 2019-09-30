@@ -1,0 +1,24 @@
+From a4026bf99f666e3270049656088a810a9d510ff1 Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Mon, 17 Jun 2019 16:03:36 +0800
+Subject: [PATCH] backport remove a resource leak from mountd/fsloc.c
+
+---
+ utils/mountd/fsloc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/utils/mountd/fsloc.c b/utils/mountd/fsloc.c
+index bc737d1..cf42944 100644
+--- a/utils/mountd/fsloc.c
++++ b/utils/mountd/fsloc.c
+@@ -102,6 +102,7 @@ static struct servers *parse_list(char **list)
+ 		cp = strchr(list[i], '@');
+ 		if ((!cp) || list[i][0] != '/') {
+ 			xlog(L_WARNING, "invalid entry '%s'", list[i]);
++			free(mp);
+ 			continue; /* XXX Need better error handling */
+ 		}
+ 		res->h_mp[i] = mp;
+-- 
+1.8.3.1
+

@@ -1,0 +1,28 @@
+From 8e8f8d57ccb970ebdd09896345b100d64528b546 Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Sat, 16 Mar 2019 16:28:36 +0800
+Subject: [PATCH] =?UTF-8?q?backport=20run=20statd-notify=20even=20when=20n?=
+ =?UTF-8?q?fs-client=20isn=E2=80=98t=20enabled?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ systemd/rpc-statd.service | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/systemd/rpc-statd.service b/systemd/rpc-statd.service
+index 7cd78ec..888bd5d 100644
+--- a/systemd/rpc-statd.service
++++ b/systemd/rpc-statd.service
+@@ -4,6 +4,7 @@ DefaultDependencies=no
+ Conflicts=umount.target
+ Requires=nss-lookup.target rpcbind.socket
+ Wants=network-online.target
++Wants=rpc-statd-notify.service
+ After=network-online.target nss-lookup.target rpcbind.socket
+ 
+ PartOf=nfs-utils.service
+-- 
+1.8.3.1
+

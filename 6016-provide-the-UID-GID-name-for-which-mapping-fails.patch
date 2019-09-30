@@ -1,0 +1,40 @@
+From 2a9500003c745ce3305a38af77086572d37729ba Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Sat, 16 Mar 2019 17:21:23 +0800
+Subject: [PATCH] backport provide the UID/GID/name for which mapping fails
+
+---
+ utils/nfsidmap/nfsidmap.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/utils/nfsidmap/nfsidmap.c b/utils/nfsidmap/nfsidmap.c
+index 1359302..b3485ea 100644
+--- a/utils/nfsidmap/nfsidmap.c
++++ b/utils/nfsidmap/nfsidmap.c
+@@ -205,8 +205,9 @@ static int id_lookup(char *name_at_domain, key_serial_t key, int type)
+ 		sprintf(id, "%u", gid);
+ 	}
+ 	if (rc < 0) {
+-		xlog_errno(rc, "id_lookup: %s: failed: %m",
+-			(type == USER ? "nfs4_owner_to_uid" : "nfs4_group_owner_to_gid"));
++		xlog_errno(rc, "id_lookup: %s: for %s failed: %m",
++			(type == USER ? "nfs4_owner_to_uid" : "nfs4_group_owner_to_gid"),
++			name_at_domain);
+ 		return EXIT_FAILURE;
+ 	}
+ 
+@@ -262,8 +263,9 @@ static int name_lookup(char *id, key_serial_t key, int type)
+ 		rc = nfs4_gid_to_name(gid, domain, name, IDMAP_NAMESZ);
+ 	}
+ 	if (rc) {
+-		xlog_errno(rc, "name_lookup: %s: failed: %m",
+-			(type == USER ? "nfs4_uid_to_name" : "nfs4_gid_to_name"));
++		xlog_errno(rc, "name_lookup: %s: for %u failed: %m",
++			(type == USER ? "nfs4_uid_to_name" : "nfs4_gid_to_name"),
++			(type == USER ? uid : gid));
+ 		return EXIT_FAILURE;
+ 	}
+ 
+-- 
+1.8.3.1
+

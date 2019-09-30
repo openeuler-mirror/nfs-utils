@@ -1,0 +1,29 @@
+From db710094502306fc61457c7bc19e95bb28767496 Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Mon, 17 Jun 2019 15:56:40 +0800
+Subject: [PATCH] backport remove a resource leak from mount/stropts.c
+
+---
+ utils/mount/stropts.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/utils/mount/stropts.c b/utils/mount/stropts.c
+index 5333498..b4826a2 100644
+--- a/utils/mount/stropts.c
++++ b/utils/mount/stropts.c
+@@ -982,8 +982,11 @@ static int nfs_try_mount(struct nfsmount_info *mi)
+ 		}
+ 
+ 		if (!nfs_append_addr_option(address->ai_addr,
+-					    address->ai_addrlen, mi->options))
++					    address->ai_addrlen, mi->options)) {
++			freeaddrinfo(address);
++			errno = ENOMEM;
+ 			return 0;
++		}
+ 		mi->address = address;
+ 	}
+ 
+-- 
+1.8.3.1
+

@@ -1,0 +1,25 @@
+From a966249d50bed2fc81f9aa130bc4892a94d95a00 Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Sat, 16 Mar 2019 16:50:55 +0800
+Subject: [PATCH] backport fixed manage-gids option typo in nfs.conf
+
+---
+ nfs.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/nfs.conf b/nfs.conf
+index 0d0ec9b..2cc0950 100644
+--- a/nfs.conf
++++ b/nfs.conf
+@@ -25,7 +25,7 @@
+ #
+ #[mountd]
+ # debug=0
+-# manage_gids=n
++# manage-gids=n
+ # descriptors=0
+ # port=0
+ # threads=1
+-- 
+1.8.3.1
+

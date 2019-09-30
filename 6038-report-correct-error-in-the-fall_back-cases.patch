@@ -1,0 +1,45 @@
+From 999e616fc825ffdc13c7cfeab3429284bcbe37c5 Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Mon, 17 Jun 2019 16:11:51 +0800
+Subject: [PATCH] backport report correct error in the fall_back cases
+
+---
+ utils/mount/stropts.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/utils/mount/stropts.c b/utils/mount/stropts.c
+index b4826a2..f54bb61 100644
+--- a/utils/mount/stropts.c
++++ b/utils/mount/stropts.c
+@@ -888,7 +888,7 @@ out:
+  */
+ static int nfs_autonegotiate(struct nfsmount_info *mi)
+ {
+-	int result;
++	int result, olderrno;
+ 
+ 	result = nfs_try_mount_v4(mi);
+ check_result:
+@@ -948,7 +948,18 @@ fall_back:
+ 	if (mi->version.v_mode == V_GENERAL)
+ 		/* v2,3 fallback not allowed */
+ 		return result;
+-	return nfs_try_mount_v3v2(mi, FALSE);
++
++	/*
++	 * Save the original errno in case the v3
++ 	 * mount fails from one of the fall_back cases.
++	 * Report the first failure not the v3 mount failure
++	 */
++	olderrno = errno;
++	if ((result = nfs_try_mount_v3v2(mi, FALSE)))
++		return result;
++
++	errno = olderrno;
++	return result;
+ }
+ 
+ /*
+-- 
+1.8.3.1
+

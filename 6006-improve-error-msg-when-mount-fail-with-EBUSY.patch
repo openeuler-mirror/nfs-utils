@@ -1,0 +1,25 @@
+From 421e1a4c580ddf4d8f7e5f1453b395367d24ad09 Mon Sep 17 00:00:00 2001
+From: huyan <hu.huyan@huawei.com>
+Date: Sat, 16 Mar 2019 15:36:08 +0800
+Subject: [PATCH] backport improve error msg when mount fail with EBUSY
+
+---
+ utils/mount/error.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/utils/mount/error.c b/utils/mount/error.c
+index c9797fc..dfe5c7d 100644
+--- a/utils/mount/error.c
++++ b/utils/mount/error.c
+@@ -223,7 +223,7 @@ void mount_error(const char *spec, const char *mount_point, int error)
+ 				  progname, mount_point);
+ 		break;
+ 	case EBUSY:
+-		nfs_error(_("%s: %s is busy or already mounted"),
++		nfs_error(_("%s: %s is busy or already mounted or sharecache fail"),
+ 			progname, mount_point);
+ 		break;
+ 	case ENOENT:
+-- 
+1.8.3.1
+

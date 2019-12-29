@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.3.3
-Release: 4
+Release: 5
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -236,7 +236,7 @@ fi
 %preun
 if [ $1 -eq 0 ]; then
     %systemd_preun nfs-client.target
-    %systemd_preun nfs-server.server
+    %systemd_preun nfs-server.service
 fi
 
 %postun
@@ -285,6 +285,12 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Sun Dec 29 2019 openEuler Buildteam <buildteam@openeuler.org> - 2.3.3-5
+- Type:bugfix
+- ID:NA
+- SUG:restart
+- DESC:Modify the wrong service file name in spec file
+
 * Sun Sep 29 2019 zhanghaibo <ted.zhang@huawei.com> - 2.3.3-4
 - Remove some comments
 

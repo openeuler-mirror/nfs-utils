@@ -204,7 +204,7 @@ fi
 %dir %attr(700,rpcuser,rpcuser) %{_sharedstatedir}/nfs/statd/sm.bak
 %ghost %attr(644,rpcuser,rpcuser) %{_statdpath}/state
 %attr(4755,root,root) /sbin/mount.nfs
-/sbin/{rpc.statd,nfsdcltrack,osd_login,mount.nfs4,umount.*}
+/sbin/{rpc.statd,nfsdcltrack,osd_login,mount.nfs4,umount.*,nfsdcld}
 %{_sbindir}/*
 %{_prefix}/lib/systemd/*/*
 %{_libdir}/libnfsidmap.so.*

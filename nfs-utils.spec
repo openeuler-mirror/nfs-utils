@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.4.2
-Release: 1
+Release: 2
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -177,6 +177,7 @@ fi
 if [ $1 -eq 0 ]; then
     %systemd_preun nfs-client.target
     %systemd_preun nfs-server.service
+    /bin/systemctl stop var-lib-nfs-rpc_pipefs.mount &> /dev/null || :
 fi
 
 %postun
@@ -220,6 +221,12 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Fri Jan 17 2020 openEuler Buildteam <buildteam@openeuler.org> - 2.4.2-2
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:stop the var-lib-nfs-rpc_pipefs.mount before remove the package
+
 * Sat Jan 11 2020 openEuler Buildteam <buildteam@openeuler.org> - 2.4.2-1
 - Type:enhancemnet
 - ID:NA

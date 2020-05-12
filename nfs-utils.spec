@@ -3,8 +3,8 @@
 %global _statdpath /var/lib/nfs/statd
 
 Name:    nfs-utils
-Version: 2.4.2
-Release: 3
+Version: 2.4.3
+Release: 0
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -127,9 +127,6 @@ ln -s nfs-idmapd.service  nfs-idmap.service
 rm -rf $RPM_BUILD_ROOT%{_libdir}/{*.a,*.la}
 rm -rf $RPM_BUILD_ROOT%{_libdir}/libnfsidmap/{*.a,*.la}
 
-%check
-make check
-
 %pre
 if [ -f /var/lock/subsys/rpc.gssd ]; then
     mv /var/lock/subsys/rpc.gssd /var/lock/subsys/rpcgssd
@@ -224,11 +221,11 @@ fi
 %{_mandir}/*/*
 
 %changelog
-* Sat Mar 28 2020 hy <eulerstoragemt@huawei.com> - 2.4.2-3
-- Type:enhancemnet
+* Wed Apr 15 2020 Miaohe Lin <linmiaohe@huawei.com> - 2.4.3-0
+- Type:bugfix
 - ID:NA
-- SUG:restart
-- DESC:add make check
+- SUG:NA
+- DESC:Upgrade Package to 2.4.3
 
 * Fri Jan 17 2020 openEuler Buildteam <buildteam@openeuler.org> - 2.4.2-2
 - Type:bugfix

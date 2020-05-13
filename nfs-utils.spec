@@ -3,8 +3,8 @@
 %global _statdpath /var/lib/nfs/statd
 
 Name:    nfs-utils
-Version: 2.4.2
-Release: 2
+Version: 2.4.3
+Release: 0
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -221,6 +221,12 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Wed Apr 15 2020 Miaohe Lin <linmiaohe@huawei.com> - 2.4.3-0
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:Upgrade Package to 2.4.3
+
 * Fri Jan 17 2020 openEuler Buildteam <buildteam@openeuler.org> - 2.4.2-2
 - Type:bugfix
 - ID:NA

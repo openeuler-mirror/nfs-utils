@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.4.2
-Release: 3
+Release: 4
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -12,8 +12,8 @@ URL:     http://sourceforge.net/projects/nfs/
 
 Source0: https://www.kernel.org/pub/linux/utils/nfs-utils/%{version}/%{name}-%{version}.tar.xz
 
-Patch9000:  9000-systemd-idmapd-require-rpc-pipefs.patch
-Patch9001:  9001-correct-the-statd-path-in-man.patch
+Patch0:  0000-systemd-idmapd-require-rpc-pipefs.patch
+Patch1:  0001-correct-the-statd-path-in-man.patch
 
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
@@ -224,6 +224,12 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Tue Jun 30 2020 volcanodragon <linfeilong@huawei.com> - 2.4.2-4
+- Type:enhancemnet
+- ID:NA
+- SUG:restart
+- DESC:rename patch
+
 * Sat Mar 28 2020 hy <eulerstoragemt@huawei.com> - 2.4.2-3
 - Type:enhancemnet
 - ID:NA

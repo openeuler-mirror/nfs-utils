@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.1
-Release: 2
+Release: 3
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -222,6 +222,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Wed Nov 11 2020 lixiaokeng <lixiaokeng@huawei.com> - 2.5.1-3
+- add epoch to the version of help package required
+
 * Thu Dec 17 2020 yanglongkang <yanglongkang@huawei.com> - 2.5.1-2
 - set help package as install requires
 

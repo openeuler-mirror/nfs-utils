@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.1
-Release: 2
+Release: 3
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -26,7 +26,7 @@ BuildRequires: systemd, pkgconfig, rpcgen
 Requires:         rpcbind, sed, gawk, grep, kmod, keyutils, quota
 Requires:         libevent libblkid libcap libmount
 Requires:         libtirpc >= 0.2.3-1 gssproxy => 0.7.0-3
-Requires:         %{name}-help = %{version}-%{release}
+Requires:         %{name}-help = %{epoch}:%{version}-%{release}
 Requires(pre):    shadow-utils >= 4.0.3-25
 Requires(pre):    util-linux
 Requires(pre):    coreutils
@@ -222,6 +222,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Wed Nov 11 2020 lixiaokeng <lixiaokeng@huawei.com> - 2.5.1-3
+- add epoch to the version of help package required
+
 * Tue Nov 10 2020 lixiaokeng <lixiaokeng@huawei.com> - 2.5.1-2
 - set help package as install requires
 

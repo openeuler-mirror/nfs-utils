@@ -3,8 +3,8 @@
 %global _statdpath /var/lib/nfs/statd
 
 Name:    nfs-utils
-Version: 2.5.1
-Release: 2
+Version: 2.5.4
+Release: 1
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -225,6 +225,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Thu Nov 18 2021 Wenchao Hao <haowenchao@huawei.com> - 2.5.4-1
+- update nfs-utils version to 2.5.4-1
+
 * Thu Dec 17 2020 yanglongkang <yanglongkang@huawei.com> - 2.5.1-2
 - set help package as install requires
 

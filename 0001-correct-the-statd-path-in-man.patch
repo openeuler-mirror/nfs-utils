@@ -10,7 +10,7 @@ Signed-off-by: hy-euler<eulerstoragemt@huawei.com>
  2 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/utils/statd/sm-notify.man b/utils/statd/sm-notify.man
-index cfe1e4b..4658d86 100644
+index addf5d3..1a29bc3 100644
 --- a/utils/statd/sm-notify.man
 +++ b/utils/statd/sm-notify.man
 @@ -184,7 +184,7 @@ where NSM state information resides.
@@ -40,7 +40,7 @@ index cfe1e4b..4658d86 100644
  .TP 2.5i
  .I /proc/sys/fs/nfs/nsm_local_state
 diff --git a/utils/statd/statd.man b/utils/statd/statd.man
-index 71d5846..ad81490 100644
+index 7441ffd..82da4ee 100644
 --- a/utils/statd/statd.man
 +++ b/utils/statd/statd.man
 @@ -251,7 +251,7 @@ where NSM state information resides.
@@ -68,7 +68,7 @@ index 71d5846..ad81490 100644
 +.I /var/lib/nfs/statd/state
  NSM state number for this host
  .TP 2.5i
- .I /var/run/run.statd.pid
---
-1.7.12.4
+ .I /run/run.statd.pid
+-- 
+2.30.0
 

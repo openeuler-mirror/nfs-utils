@@ -1,0 +1,44 @@
+From c7e995c8a4a3985d1b315814d29e8d9211d6dc5e Mon Sep 17 00:00:00 2001
+From: lixiaokeng <lixiaokeng@huawei.com>
+Date: Tue, 30 Nov 2021 16:38:02 +0800
+Subject: [PATCH 1/2] fix coredump in bl_add_disk
+
+The serial->data is not malloced separately, so it can't be freed.
+Just free(serial).
+
+Signed-off-by: Lixiaokeng <lixiaokeng@huawei.com>
+---
+ utils/blkmapd/device-discovery.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/utils/blkmapd/device-discovery.c b/utils/blkmapd/device-discovery.c
+index f5f9b10..2c50205 100644
+--- a/utils/blkmapd/device-discovery.c
++++ b/utils/blkmapd/device-discovery.c
+@@ -188,7 +188,6 @@ static void bl_add_disk(char *filepath)
+ 
+ 	if (disk && diskpath) {
+ 		if (serial) {
+-			free(serial->data);
+ 			free(serial);
+ 		}
+ 		return;
+@@ -229,7 +228,6 @@ static void bl_add_disk(char *filepath)
+ 			disk->valid_path = path;
+ 		}
+ 		if (serial) {
+-			free(serial->data);
+ 			free(serial);
+ 		}
+ 	}
+@@ -242,7 +240,6 @@ static void bl_add_disk(char *filepath)
+ 		free(path);
+ 	}
+ 	if (serial) {
+-		free(serial->data);
+ 		free(serial);
+ 	}
+ 	return;
+-- 
+2.26.1.windows.1
+

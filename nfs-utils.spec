@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.1
-Release: 2
+Release: 4
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -14,6 +14,7 @@ Source0: https://www.kernel.org/pub/linux/utils/nfs-utils/%{version}/%{name}-%{v
 
 Patch0:  0000-systemd-idmapd-require-rpc-pipefs.patch
 Patch1:  0001-correct-the-statd-path-in-man.patch
+Patch2:  0002-fix-coredump-in-bl_add_disk.patch
 
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
@@ -222,6 +223,12 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Tue Nov 30 2021 yanglongkang <yanglongkang@huawei.com> - 2.5.1-4
+- fix nfs-blkmapd service core dump
+
+* Wed Nov 11 2020 lixiaokeng <lixiaokeng@huawei.com> - 2.5.1-3
+- add epoch to the version of help package required
+
 * Thu Dec 17 2020 yanglongkang <yanglongkang@huawei.com> - 2.5.1-2
 - set help package as install requires
 

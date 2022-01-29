@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.1
-Release: 4
+Release: 5
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -15,6 +15,7 @@ Source0: https://www.kernel.org/pub/linux/utils/nfs-utils/%{version}/%{name}-%{v
 Patch0:  0000-systemd-idmapd-require-rpc-pipefs.patch
 Patch1:  0001-correct-the-statd-path-in-man.patch
 Patch2:  0002-fix-coredump-in-bl_add_disk.patch
+Patch3:  0003-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch
 
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
@@ -223,6 +224,10 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Sat Jan 29 2022 Zhiqiang Liu <liuzhiqiang26@huawei.com> - 2.5.1-5
+- In order to be consistent with the old versions, here we set
+  use-gss-proxy to true in nfs.conf.
+
 * Tue Nov 30 2021 yanglongkang <yanglongkang@huawei.com> - 2.5.1-4
 - fix nfs-blkmapd service core dump
 

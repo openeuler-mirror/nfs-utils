@@ -1,0 +1,35 @@
+From 2d1df7efe8e178721be9177e8ee0622e29991950 Mon Sep 17 00:00:00 2001
+From: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Date: Sat, 29 Jan 2022 14:40:18 +0800
+Subject: [PATCH] nfs-utils: set use-gss-proxy=1 to enable gss-proxy by default
+
+In commit 104f90f4ce ('gssd: Introduce use-gss-proxy boolean to nfs.conf'),
+use-gss-proxy par in [gssd] section of nfs.conf is introduced to
+allow the used of the gssprox-mech. However, the default value
+of use-gss-proxy is false, which cause different behavor with older
+version.
+
+In order to be consistent with the old versions, here we set
+use-gss-proxy to true in nfs.conf.
+
+Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+---
+ nfs.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/nfs.conf b/nfs.conf
+index 186a5b1..955abea 100644
+--- a/nfs.conf
++++ b/nfs.conf
+@@ -16,7 +16,7 @@
+ # rpc-verbosity=0
+ # use-memcache=0
+ # use-machine-creds=1
+-# use-gss-proxy=0
++use-gss-proxy=0
+ # avoid-dns=1
+ # limit-to-legacy-enctypes=0
+ # context-timeout=0
+-- 
+1.8.3.1
+

@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.4
-Release: 2
+Release: 3
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -15,6 +15,7 @@ Source0: https://www.kernel.org/pub/linux/utils/nfs-utils/%{version}/%{name}-%{v
 Patch0:  0000-systemd-idmapd-require-rpc-pipefs.patch
 Patch1:  0001-correct-the-statd-path-in-man.patch
 Patch2:  0002-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch
+Patch3:	 0003-idmapd-Fix-error-status-when-nfs-idmapd-exits.patch
 
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
@@ -226,6 +227,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Thu Feb 24 2022 Wu Bo <wubo40@huawei.com> - 2.5.4-3
+- idmapd Fix error status when nfs idmapd exits
+
 * Sat Jan 29 2022 Zhiqiang Liu <liuzhiqiang26@huawei.com> - 2.5.4-2
 - In order to be consistent with the old versions, here we set
   use-gss-proxy to true in nfs.conf.

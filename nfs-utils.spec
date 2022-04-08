@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.4
-Release: 4
+Release: 5
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -228,6 +228,10 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Fri Apr 8 2022 Zhiqiang Liu <liuzhiqiang26@huawei.com> - 2.5.4-5
+- set use-gss-proxy to true in nfs.conf to be consistent with the
+  description of 0002-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch
+
 * Mon Mar 7 2022 yanglongkang <yanglongkang@h-partners.com> - 2.5.4-4
 - fix nfs-blkmapd service core dump
 

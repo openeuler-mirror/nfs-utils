@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.1
-Release: 5
+Release: 6
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -224,6 +224,10 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Fri Jul 1 2022 liwenchong <liwenchong@kylinos.cn> - 1:2.5.1-6
+- set use-gss-proxy to true in nfs.conf to be consistent with the
+  description of 0003-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch
+
 * Sat Jan 29 2022 Zhiqiang Liu <liuzhiqiang26@huawei.com> - 2.5.1-5
 - In order to be consistent with the old versions, here we set
   use-gss-proxy to true in nfs.conf.

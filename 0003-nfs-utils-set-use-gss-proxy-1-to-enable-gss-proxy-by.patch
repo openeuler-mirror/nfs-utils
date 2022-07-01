@@ -26,7 +26,7 @@ index 186a5b1..955abea 100644
  # use-memcache=0
  # use-machine-creds=1
 -# use-gss-proxy=0
-+use-gss-proxy=0
++use-gss-proxy=1
  # avoid-dns=1
  # limit-to-legacy-enctypes=0
  # context-timeout=0

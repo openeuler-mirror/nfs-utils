@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.4
-Release: 6
+Release: 7
 Epoch:   2
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -17,7 +17,7 @@ Patch1:  0001-correct-the-statd-path-in-man.patch
 Patch2:  0002-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch
 Patch3:	 0003-idmapd-Fix-error-status-when-nfs-idmapd-exits.patch
 Patch4:	 0004-fix-coredump-in-bl_add_disk.patch
-
+Patch5:  0005-Fix-format-overflow-warning.patch 
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
 BuildRequires: automake, libtool, gcc, device-mapper-devel
@@ -228,6 +228,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Thu Aug 11 2022 xueyamao <xueyamao@ktlinos.cn> - 2:2.5.4-7
+- systemd: Fix format-overflow warning.
+
 * Sat Apr 16 2022 Wu Bo <wubo40@huawei.com> - 2.5.4-6
 - Update epoch version to 2. In order to fix the upgrade issues.
 

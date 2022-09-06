@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.1
-Release: 6
+Release: 7
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -16,6 +16,7 @@ Patch0:  0000-systemd-idmapd-require-rpc-pipefs.patch
 Patch1:  0001-correct-the-statd-path-in-man.patch
 Patch2:  0002-fix-coredump-in-bl_add_disk.patch
 Patch3:  0003-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch
+Patch4:  0004-nfs-blkmaped-Fix-the-error-status-when-nfs_blkmapd-s.patch
 
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
@@ -224,6 +225,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Tue Sep 6 2022 zhanchengbin <zhanchengbin@huawei.com> - 1:2.5.1-7
+- nfs-blkmaped: Fix the error status when nfs_blkmapd stops
+
 * Fri Jul 1 2022 liwenchong <liwenchong@kylinos.cn> - 1:2.5.1-6
 - set use-gss-proxy to true in nfs.conf to be consistent with the
   description of 0003-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch

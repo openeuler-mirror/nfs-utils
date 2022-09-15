@@ -1,0 +1,35 @@
+From 576d3569c025e829e4ce432103532fcf63808d39 Mon Sep 17 00:00:00 2001
+From: zhanchengbin <zhanchengbin1@huawei.com>
+Date: Tue, 6 Sep 2022 09:49:30 +0800
+Subject: [PATCH] nfs-blkmaped: Fix the error status when nfs_blkmapd stops
+
+The systemctl stop nfs-blkmap.service will sends the SIGTERM signal
+to the nfs-blkmap.service first.If the process fails to be stopped,
+it sends the SIGKILL signal again to kill the process.
+However, exit(1) is executed in the SIGTERM processing function of
+nfs-blkmap.service. As a result, systemd receives an error message
+indicating that nfs-blkmap.service failed.
+"Active: failed" is displayed when the systemctl status
+nfs-blkmap.service command is executed. 
+
+Signed-off-by: zhanchengbin <zhanchengbin1@huawei.com>
+---
+ utils/blkmapd/device-discovery.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/utils/blkmapd/device-discovery.c b/utils/blkmapd/device-discovery.c
+index 77ebe73..8ca548c 100644
+--- a/utils/blkmapd/device-discovery.c
++++ b/utils/blkmapd/device-discovery.c
+@@ -462,7 +462,7 @@ static void sig_die(int signal)
+ 		unlink(PID_FILE);
+ 	}
+ 	BL_LOG_ERR("exit on signal(%d)\n", signal);
+-	exit(1);
++	exit(0);
+ }
+ static void usage(void)
+ {
+-- 
+1.8.3.1
+

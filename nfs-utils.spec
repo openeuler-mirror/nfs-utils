@@ -3,8 +3,8 @@
 %global _statdpath /var/lib/nfs/statd
 
 Name:    nfs-utils
-Version: 2.5.4
-Release: 8
+Version: 2.6.2
+Release: 1
 Epoch:   2
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -15,10 +15,8 @@ Source0: https://www.kernel.org/pub/linux/utils/nfs-utils/%{version}/%{name}-%{v
 Patch0:  0000-systemd-idmapd-require-rpc-pipefs.patch
 Patch1:  0001-correct-the-statd-path-in-man.patch
 Patch2:  0002-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch
-Patch3:	 0003-idmapd-Fix-error-status-when-nfs-idmapd-exits.patch
-Patch4:	 0004-fix-coredump-in-bl_add_disk.patch
-Patch5:  0005-Fix-format-overflow-warning.patch 
-Patch6:  0006-nfs-blkmaped-Fix-the-error-status-when-nfs_blkmapd-s.patch
+Patch3:	 0003-fix-coredump-in-bl_add_disk.patch
+Patch4:  0004-nfs-blkmaped-Fix-the-error-status-when-nfs_blkmapd-s.patch
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
 BuildRequires: automake, libtool, gcc, device-mapper-devel
@@ -212,6 +210,9 @@ fi
 %dir %attr(700,rpcuser,rpcuser) %{_sharedstatedir}/nfs/statd/sm
 %dir %attr(700,rpcuser,rpcuser) %{_sharedstatedir}/nfs/statd/sm.bak
 %ghost %attr(644,rpcuser,rpcuser) %{_statdpath}/state
+%attr(0600,root,root) %config(noreplace) /usr/lib/modprobe.d/50-nfs.conf
+%{_libexecdir}/nfsrahead
+%{_udevrulesdir}/99-nfs.rules
 %attr(4755,root,root) /sbin/mount.nfs
 /sbin/{rpc.statd,nfsdcltrack,osd_login,mount.nfs4,umount.*,nfsdcld}
 %{_sbindir}/*
@@ -229,6 +230,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Wed Oct 12 2022 zhanchengbin <zhanchengbin1@huawei.com> - 2:2.6.2-1
+- update package to v2.6.2
+
 * Tue Sep 6 2022 zhanchengbin <zhanchengbin1@huawei.com> - 2:2.5.4-8
 - nfs-blkmapd: Fix the error status when nfs-blkmapd stops
 

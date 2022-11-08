@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.6.2
-Release: 1
+Release: 2
 Epoch:   2
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -26,7 +26,7 @@ BuildRequires: systemd, pkgconfig, rpcgen
 
 
 Requires:         rpcbind, sed, gawk, grep, kmod, keyutils, quota
-Requires:         libevent libblkid libcap libmount
+Requires:         libevent libblkid libcap libmount libnfsidmap
 Requires:         libtirpc >= 0.2.3-1 gssproxy => 0.7.0-3
 Recommends:       %{name}-help = %{epoch}:%{version}-%{release}
 Requires(pre):    shadow-utils >= 4.0.3-25
@@ -38,7 +38,6 @@ Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
 Requires(postun): glibc
-Requires:         openldap
 
 
 Provides:  exportfs    = %{epoch}:%{version}-%{release}
@@ -56,9 +55,6 @@ Provides:  umount.nfs  = %{epoch}:%{version}-%{release}
 Provides:  umount.nfs4 = %{epoch}:%{version}-%{release}
 Provides:  sm-notify   = %{epoch}:%{version}-%{release}
 Provides:  start-statd = %{epoch}:%{version}-%{release}
-Provides:  libnfsidmap = %{epoch}:%{version}-%{release}
-Provides:  libnfsidmap%{?_isa} = %{epoch}:%{version}-%{release}
-Obsoletes: libnfsidmap
 
 
 %description
@@ -68,7 +64,7 @@ It contains the showmount,mount.nfs,umount.nfs and libnfsidmap
 %package   devel
 Summary:   Including header files and library for the developing of libnfsidmap library
 Requires:  nfs-utils%{?_isa} = %{epoch}:%{version}-%{release}
-Requires:  pkgconfig
+Requires:  pkgconfig libnfsidmap
 Provides:  libnfsidmap-devel = %{epoch}:%{version}-%{release}
 Provides:  libnfsidmap-devel%{?_isa} = %{epoch}:%{version}-%{release}
 Obsoletes: libnfsidmap-devel
@@ -77,6 +73,37 @@ Obsoletes: libnfsidmap-devel
 This contains dynamic libraries and header files for the developing of
 the libnfsidmap library.
 
+%package -n libnfsidmap
+Summary: NFSv4 User and Group ID Mapping Library
+Provides: libnfsidmap%{?_isa} = %{epoch}:%{version}-%{release}
+License: BSD
+BuildRequires: pkgconfig, openldap-devel
+BuildRequires: automake, libtool
+Requires: openldap
+
+%description -n libnfsidmap
+Library that handles mapping between names and ids for NFSv4.
+
+%package -n nfs-utils-min
+Summary: Minimal NFS utilities for supporting clients
+Provides: nfsstat     = %{epoch}:%{version}-%{release}
+Provides: rpc.statd   = %{epoch}:%{version}-%{release}
+Provides: rpc.gssd    = %{epoch}:%{version}-%{release}
+Provides: mount.nfs   = %{epoch}:%{version}-%{release}
+Provides: mount.nfs4  = %{epoch}:%{version}-%{release}
+Provides: umount.nfs  = %{epoch}:%{version}-%{release}
+Provides: umount.nfs4 = %{epoch}:%{version}-%{release}
+Provides: start-statd = %{epoch}:%{version}-%{release}
+Provides: nfsidmap    = %{epoch}:%{version}-%{release}
+Provides: showmount   = %{epoch}:%{version}-%{release}
+Requires: rpcbind
+Requires(post):   systemd
+Requires(preun):  systemd
+Requires(postun): systemd
+Conflicts: nfs-utils
+
+%description -n nfs-utils-min
+Minimal NFS utilities for supporting clients
 
 %package   help
 Summary:   Including man files for nfs-utils
@@ -194,12 +221,11 @@ fi
 
 
 %files
-%doc support/nfsidmap/AUTHORS linux-nfs/README linux-nfs/THANKS
+%doc linux-nfs/README linux-nfs/THANKS
 %license support/nfsidmap/COPYING
 %config(noreplace) /etc/nfsmount.conf
 %config(noreplace) %{_sharedstatedir}/nfs/etab
 %config(noreplace) %{_sharedstatedir}/nfs/rmtab
-%config(noreplace) %{_sysconfdir}/idmapd.conf
 %config(noreplace) %{_sysconfdir}/request-key.d/id_resolver.conf
 %config(noreplace) %{_sysconfdir}/nfs.conf
 %dir %{_sysconfdir}/exports.d
@@ -217,8 +243,6 @@ fi
 /sbin/{rpc.statd,nfsdcltrack,osd_login,mount.nfs4,umount.*,nfsdcld}
 %{_sbindir}/*
 %{_prefix}/lib/systemd/*/*
-%{_libdir}/libnfsidmap.so.*
-%{_libdir}/libnfsidmap/*.so
 
 %files devel
 %{_includedir}/nfsidmap.h
@@ -226,10 +250,47 @@ fi
 %{_libdir}/pkgconfig/libnfsidmap.pc
 %{_libdir}/libnfsidmap.so
 
+%files -n nfs-utils-min
+%dir %attr(555, root, root) %{_sharedstatedir}/nfs/rpc_pipefs
+%dir %attr(700,rpcuser,rpcuser) %{_sharedstatedir}/nfs/statd
+%dir %attr(700,rpcuser,rpcuser) %{_sharedstatedir}/nfs/statd/sm
+%dir %attr(700,rpcuser,rpcuser) %{_sharedstatedir}/nfs/statd/sm.bak
+%ghost %attr(644,rpcuser,rpcuser) %{_statdpath}/state
+%config(noreplace) %{_sysconfdir}/nfsmount.conf
+%config(noreplace) %{_sysconfdir}/nfs.conf
+%config(noreplace) %{_sysconfdir}/request-key.d/id_resolver.conf
+%{_sbindir}/nfsidmap
+%{_sbindir}/nfsstat
+%{_sbindir}/rpc.gssd
+%{_sbindir}/start-statd
+%{_sbindir}/showmount
+%attr(4755,root,root) /sbin/mount.nfs
+/sbin/mount.nfs4
+/sbin/rpc.statd
+/sbin/umount.nfs
+/sbin/umount.nfs4
+%{_prefix}/lib/systemd/*/rpc-pipefs-generator
+%{_prefix}/lib/systemd/*/auth-rpcgss-module.service
+%{_prefix}/lib/systemd/*/nfs-client.target
+%{_prefix}/lib/systemd/*/rpc-gssd.service
+%{_prefix}/lib/systemd/*/rpc-statd.service
+%{_prefix}/lib/systemd/*/rpc_pipefs.target
+%{_prefix}/lib/systemd/*/var-lib-nfs-rpc_pipefs.mount
+
+%files -n libnfsidmap
+%doc support/nfsidmap/AUTHORS support/nfsidmap/README support/nfsidmap/COPYING
+%config(noreplace) %{_sysconfdir}/idmapd.conf
+%{_libdir}/libnfsidmap.so.*
+%{_libdir}/libnfsidmap/*.so
+%{_mandir}/man3/nfs4_uid_to_name.*
+
 %files help
 %{_mandir}/*/*
 
 %changelog
+* Mon Oct 24 2022 fushanqing <fushanqing@kylinos.cn> - 2:2.6.2-2
+- add subpackage libnfsidmap and nfs-utils-min
+
 * Wed Oct 12 2022 zhanchengbin <zhanchengbin1@huawei.com> - 2:2.6.2-1
 - update package to v2.6.2
 

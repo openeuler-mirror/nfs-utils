@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.1
-Release: 7
+Release: 8
 Epoch:   1
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -17,6 +17,7 @@ Patch1:  0001-correct-the-statd-path-in-man.patch
 Patch2:  0002-fix-coredump-in-bl_add_disk.patch
 Patch3:  0003-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch
 Patch4:  0004-nfs-blkmaped-Fix-the-error-status-when-nfs_blkmapd-s.patch
+Patch5:  0005-nfs-blkmapd-PID-file-read-by-systemd-failed.patch
 
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
@@ -225,6 +226,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Thu Nov 24 2022 Zhiqiang Liu <liuzhiqiang26@huawei.com> - 1:2.5.1-8
+- nfs-blkmapd: PID file read by systemd failed
+
 * Tue Sep 6 2022 zhanchengbin <zhanchengbin@huawei.com> - 1:2.5.1-7
 - nfs-blkmaped: Fix the error status when nfs_blkmapd stops
 

@@ -1,0 +1,28 @@
+From 631c6aa34aae7328dc297210fd2de2d5364c697f Mon Sep 17 00:00:00 2001
+From: Steve Dickson <steved@redhat.com>
+Date: Wed, 4 Jan 2023 12:04:09 -0500
+Subject: [PATCH] Covscan Scan: Wrong Check of Return Value
+
+Fixes: https://bugzilla.redhat.com/show_bug.cgi?id=2151966
+Signed-off-by: Steve Dickson <steved@redhat.com>
+---
+ support/export/client.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/support/export/client.c b/support/export/client.c
+index ea4f89d3..79164fef 100644
+--- a/support/export/client.c
++++ b/support/export/client.c
+@@ -699,6 +699,9 @@ check_netgroup(const nfs_client *clp, const struct addrinfo *ai)
+ 
+ 	/* check whether the IP itself is in the netgroup */
+ 	ip = calloc(INET6_ADDRSTRLEN, 1);
++	if (ip == NULL)
++		goto out;
++
+ 	if (inet_ntop(ai->ai_family, &(((struct sockaddr_in *)ai->ai_addr)->sin_addr), ip, INET6_ADDRSTRLEN) == ip) {
+ 		if (innetgr(netgroup, ip, NULL, NULL)) {
+ 			free(hname);
+-- 
+2.33.0
+

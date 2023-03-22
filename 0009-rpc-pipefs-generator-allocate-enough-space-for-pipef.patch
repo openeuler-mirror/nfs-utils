@@ -1,0 +1,33 @@
+From 40c5af17e76322bb1d030eee5dc7837946c90c08 Mon Sep 17 00:00:00 2001
+From: Steve Dickson <steved@redhat.com>
+Date: Thu, 21 Jul 2022 15:11:17 -0400
+Subject: [PATCH] rpc-pipefs-generator: allocate enough space for
+ pipefs-directory buffer
+
+Commit 7f8463fe fixed a warning but introduce
+a regression by not allocating enough space
+for the pipefs-directory buffer when it is
+not the default.
+
+Fixes: https://bugzilla.redhat.com/show_bug.cgi?id=2106896
+Signed-off-by: Steve Dickson <steved@redhat.com>
+---
+ systemd/rpc-pipefs-generator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/systemd/rpc-pipefs-generator.c b/systemd/rpc-pipefs-generator.c
+index 801975c..060f59c 100644
+--- a/systemd/rpc-pipefs-generator.c
++++ b/systemd/rpc-pipefs-generator.c
+@@ -28,7 +28,7 @@ static int generate_mount_unit(const char *pipefs_path, const char *pipefs_unit,
+ {
+ 	char	*path;
+ 	FILE	*f;
+-	size_t size = (strlen(dirname) + 1 + strlen(pipefs_unit));
++	size_t size = (strlen(dirname) + 1 + strlen(pipefs_unit) + 1);
+ 	path = malloc(size);
+ 	if (!path)
+ 		return 1;
+-- 
+2.33.0
+

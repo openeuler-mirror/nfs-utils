@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.5.4
-Release: 10
+Release: 11
 Epoch:   2
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -20,6 +20,11 @@ Patch4:	 0004-fix-coredump-in-bl_add_disk.patch
 Patch5:  0005-Fix-format-overflow-warning.patch 
 Patch6:  0006-nfs-blkmaped-Fix-the-error-status-when-nfs_blkmapd-s.patch
 Patch7:  0007-nfs-blkmapd-PID-file-read-by-systemd-failed.patch
+Patch8:  0008-svcgssd-Fix-use-after-free-bug-config-variables.patch
+Patch9:  0009-rpc-pipefs-generator-allocate-enough-space-for-pipef.patch
+Patch10: 0010-nfs-utils-Don-t-allow-junction-tests-to-trigger-auto.patch
+Patch11: 0011-Covscan-Scan-Wrong-Check-of-Return-Value.patch
+
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
 BuildRequires: automake, libtool, gcc, device-mapper-devel
@@ -287,6 +292,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Thu Mar 23 2023 wuguanghao <wuguanghao3@huawei.com> - 2:2.5.4-11
+- backport patches from community
+
 * Fri Nov 25 2022 fushanqing <fushanqing@kylinos.cn> - 2:2.5.4-10
 - add subpackage libnfsidmap and nfs-utils-min
 

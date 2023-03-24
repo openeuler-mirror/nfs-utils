@@ -1,0 +1,83 @@
+From cdbef4e97a1cbc68cbaf16ba57d71858d2c69973 Mon Sep 17 00:00:00 2001
+From: Jeff Layton <jlayton@kernel.org>
+Date: Tue, 10 Jan 2023 09:37:25 -0500
+Subject: [PATCH] nfs-utils: Don't allow junction tests to trigger automounts
+
+JianHong reported some strange behavior with automounts on an nfs server
+without an explicit pseudoroot. When clients issued a readdir in the
+pseudoroot, automounted directories that were not yet mounted would show
+up even if they weren't exported, though the clients wouldn't be able to
+do anything with them.
+
+The issue was that triggering the automount on a directory would cause
+the mountd upcall to time out, which would cause nfsd to include the
+automounted dentry in the readdir response. Eventually, the automount
+would work and report that it wasn't exported and subsequent attempts to
+access the dentry would (properly) fail.
+
+We never want mountd to trigger an automount. The kernel should do that
+if it wants to use it. Change the junction checks to do an O_PATH open
+and use fstatat with AT_NO_AUTOMOUNT.
+
+Cc: Chuck Lever <chuck.lever@oracle.com>
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2148353
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216777
+Reported-by: JianHong Yin <jiyin@redhat.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Steve Dickson <steved@redhat.com>
+---
+ support/junction/junction.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/support/junction/junction.c b/support/junction/junction.c
+index 41cce261..0628bb0f 100644
+--- a/support/junction/junction.c
++++ b/support/junction/junction.c
+@@ -63,7 +63,7 @@ junction_open_path(const char *pathname, int *fd)
+ 	if (pathname == NULL || fd == NULL)
+ 		return FEDFS_ERR_INVAL;
+ 
+-	tmp = open(pathname, O_DIRECTORY);
++	tmp = open(pathname, O_PATH|O_DIRECTORY);
+ 	if (tmp == -1) {
+ 		switch (errno) {
+ 		case EPERM:
+@@ -93,7 +93,7 @@ junction_is_directory(int fd, const char *path)
+ {
+ 	struct stat stb;
+ 
+-	if (fstat(fd, &stb) == -1) {
++	if (fstatat(fd, "", &stb, AT_NO_AUTOMOUNT|AT_EMPTY_PATH) == -1) {
+ 		xlog(D_GENERAL, "%s: failed to stat %s: %m",
+ 				__func__, path);
+ 		return FEDFS_ERR_ACCESS;
+@@ -121,7 +121,7 @@ junction_is_sticky_bit_set(int fd, const char *path)
+ {
+ 	struct stat stb;
+ 
+-	if (fstat(fd, &stb) == -1) {
++	if (fstatat(fd, "", &stb, AT_NO_AUTOMOUNT|AT_EMPTY_PATH) == -1) {
+ 		xlog(D_GENERAL, "%s: failed to stat %s: %m",
+ 				__func__, path);
+ 		return FEDFS_ERR_ACCESS;
+@@ -155,7 +155,7 @@ junction_set_sticky_bit(int fd, const char *path)
+ {
+ 	struct stat stb;
+ 
+-	if (fstat(fd, &stb) == -1) {
++	if (fstatat(fd, "", &stb, AT_NO_AUTOMOUNT|AT_EMPTY_PATH) == -1) {
+ 		xlog(D_GENERAL, "%s: failed to stat %s: %m",
+ 			__func__, path);
+ 		return FEDFS_ERR_ACCESS;
+@@ -393,7 +393,7 @@ junction_get_mode(const char *pathname, mode_t *mode)
+ 	if (retval != FEDFS_OK)
+ 		return retval;
+ 
+-	if (fstat(fd, &stb) == -1) {
++	if (fstatat(fd, "", &stb, AT_NO_AUTOMOUNT|AT_EMPTY_PATH) == -1) {
+ 		xlog(D_GENERAL, "%s: failed to stat %s: %m",
+ 			__func__, pathname);
+ 		(void)close(fd);
+-- 
+2.33.0
+

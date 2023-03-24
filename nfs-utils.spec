@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.6.2
-Release: 3
+Release: 4
 Epoch:   2
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -18,6 +18,9 @@ Patch2:  0002-nfs-utils-set-use-gss-proxy-1-to-enable-gss-proxy-by.patch
 Patch3:	 0003-fix-coredump-in-bl_add_disk.patch
 Patch4:  0004-nfs-blkmaped-Fix-the-error-status-when-nfs_blkmapd-s.patch
 Patch5:  0005-nfs-blkmapd-PID-file-read-by-systemd-failed.patch
+Patch6:  0006-nfs-utils-Don-t-allow-junction-tests-to-trigger-auto.patch
+Patch7:  0007-Covscan-Scan-Wrong-Check-of-Return-Value.patch
+
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
 BuildRequires: automake, libtool, gcc, device-mapper-devel
@@ -289,6 +292,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Wed Mar 22 2023 wuguanghao <wuguanghao3@huawei.com> - 2:2.6.2-4
+- backport patches from community
+
 * Mon Nov 21 2022 fangchuang <fangchuangchuang@huawei.com> - 2:2.6.2-3
 - nfs-blkmapd: PID file read by systemd failed
 

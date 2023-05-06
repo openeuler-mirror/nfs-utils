@@ -4,7 +4,7 @@
 
 Name:    nfs-utils
 Version: 2.6.2
-Release: 4
+Release: 5
 Epoch:   2
 Summary: The Linux NFS userland utility package
 License: MIT and GPLv2 and GPLv2+ and BSD
@@ -20,6 +20,7 @@ Patch4:  0004-nfs-blkmaped-Fix-the-error-status-when-nfs_blkmapd-s.patch
 Patch5:  0005-nfs-blkmapd-PID-file-read-by-systemd-failed.patch
 Patch6:  0006-nfs-utils-Don-t-allow-junction-tests-to-trigger-auto.patch
 Patch7:  0007-Covscan-Scan-Wrong-Check-of-Return-Value.patch
+Patch8:  0008-fix-clang.patch
 
 BuildRequires: libevent-devel,libcap-devel, libtirpc-devel libblkid-devel
 BuildRequires: krb5-libs >= 1.4 autoconf >= 2.57 openldap-devel >= 2.2
@@ -123,7 +124,7 @@ find -name \*.py -exec sed -r -i '1s|^#!\s*/usr/bin.*python.*|#!%{__python3}|' {
 %build
 sh -x autogen.sh
 %configure \
-    CFLAGS="%{build_cflags} -D_FILE_OFFSET_BITS=64" \
+    CFLAGS="%{build_cflags} -D_FILE_OFFSET_BITS=64 -Wno-logical-not-parentheses -Wno-format-nonliteral" \
     LDFLAGS="%{build_ldflags}" \
     --enable-mountconfig \
     --enable-ipv6 \
@@ -292,6 +293,9 @@ fi
 %{_mandir}/*/*
 
 %changelog
+* Sat May 06 2023 yoo <sunyuechi@iscas.ac.cn> - 2:2.6.2-5
+- fix clang build error
+
 * Wed Mar 22 2023 wuguanghao <wuguanghao3@huawei.com> - 2:2.6.2-4
 - backport patches from community
 

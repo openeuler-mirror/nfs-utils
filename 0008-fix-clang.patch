@@ -1,0 +1,57 @@
+Only in nfs-utils-2.6.2: combined.patch
+diff -u -r nfs-utils-2.6.2/configure.ac nfs-utils-2.6.2/configure.ac
+--- nfs-utils-2.6.2/configure.ac	2022-08-08 23:04:28.000000000 +0800
++++ nfs-utils-2.6.2/configure.ac	2023-05-06 11:55:24.000000000 +0800
+@@ -151,7 +151,11 @@
+ 	[AS_HELP_STRING([--with-rpcgen=internal],[use internal rpcgen instead of system one])],
+ 	rpcgen_path=$withval,
+ 	rpcgen_path=yes )
+-	rpcgen_cflags=-Werror=strict-prototypes
++	case "$CC" in
++		*gcc*)
++			rpcgen_cflags=-Werror=strict-prototypes
++			;;
++	esac
+ 	RPCGEN_PATH=
+ 	if test "$rpcgen_path" = "yes"; then
+ 	    for p in /usr/local/bin/rpcgen /usr/bin/rpcgen /bin/rpcgen
+@@ -163,7 +167,11 @@
+ 	    RPCGEN_PATH=$rpcgen_path
+ 	else
+ 	    RPCGEN_PATH=internal
+-	    rpcgen_cflags=-Wstrict-prototypes
++			case "$CC" in
++				*gcc*)
++					rpcgen_cflags=-Wstrict-prototypes
++					;;
++			esac
+ 	fi
+ 	AC_SUBST(RPCGEN_PATH)
+ 	AM_CONDITIONAL(CONFIG_RPCGEN, [test "$RPCGEN_PATH" = "internal"])
+Only in nfs-utils-2.6.2: nfs-utils-2.6.2.tar.xz
+diff -u -r nfs-utils-2.6.2/utils/gssd/gssd_proc.c nfs-utils-2.6.2/utils/gssd/gssd_proc.c
+--- nfs-utils-2.6.2/utils/gssd/gssd_proc.c	2022-08-08 23:04:28.000000000 +0800
++++ nfs-utils-2.6.2/utils/gssd/gssd_proc.c	2023-05-06 11:37:37.000000000 +0800
+@@ -776,17 +776,17 @@
+ 
+ 	do_downcall(fd, uid, &pd, &token, lifetime_rec, &acceptor);
+ 
+-out:
+-	pthread_cleanup_pop(1);
+-
+-	return;
+-
+ out_return_error:
+ 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+ 	pthread_testcancel();
+ 
+ 	do_error_downcall(fd, uid, downcall_err);
+ 	goto out;
++
++out:
++	pthread_cleanup_pop(1);
++
++	return;
+ }
+ 
+ static struct clnt_upcall_info *
